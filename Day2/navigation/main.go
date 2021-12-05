@@ -1,14 +1,14 @@
 package main
 
 import (
-	"bufio"
+	_ "embed"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 )
 
-const fileName = "input.txt"
+//go:embed input.txt
+var incomingData string
 
 // Steering handles Navigation of the Submarine
 type Steering struct {
@@ -42,19 +42,11 @@ func main() {
 
 	// Starting the Submarine
 	steering := &Steering{Horizontal: 0, Depth: 0, Aim: 0}
-
-	file, err := os.Open(fileName)
-	if err != nil {
-		fmt.Println("Error while opening file")
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
+	splitData := strings.Split(incomingData, "\n")
+	for _, data := range splitData {
 		// incoming data is in format: <string int>
 		// e.g., forward 5, down 3, up 2
-		commands := strings.Split(scanner.Text(), " ")
+		commands := strings.Split(string(data), " ")
 		units, _ := strconv.Atoi(commands[1])
 		// drive the sub!!
 		steering.Navigate(commands[0], units)
