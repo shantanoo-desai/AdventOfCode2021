@@ -1,11 +1,13 @@
 package main
 
 import (
-	"bufio"
+	_ "embed"
 	"fmt"
-	"os"
 	"strconv"
 )
+
+//go:embed input.txt
+var incomingData string
 
 // DepthReport returns the total number of measurements
 // that are larger than the previous measurement
@@ -70,16 +72,8 @@ func main() {
 
 	fmt.Println("Reading Sonar Measurements")
 
-	file, err := os.Open("input.txt")
-
-	if err != nil {
-		fmt.Println("Error Opening File...")
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		me, _ := strconv.Atoi(scanner.Text())
+	for _, data := range incomingData {
+		me, _ := strconv.Atoi(string(data))
 		incomingMeasurements = append(incomingMeasurements, me)
 	}
 
